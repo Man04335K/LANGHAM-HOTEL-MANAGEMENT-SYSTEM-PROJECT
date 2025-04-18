@@ -88,8 +88,9 @@ namespace LanghamHotelManagementSystem
                         break;
 
                     case 5:
-                        // display Room Alocations function;
+                        DisplayRoomAllocations();
                         break;
+
                     case 6:
                         // Display "Billing Feature is Under Construction and will
                         be added soon...!!!"
@@ -272,6 +273,29 @@ namespace LanghamHotelManagementSystem
             }
         }
 
+        public static void DisplayRoomAllocations()
+        {
+            try
+            {
+                if (roomAllocations.Count == 0)
+                {
+                    Console.WriteLine("No room allocations to display.");
+                    return;
+                }
+
+                Console.WriteLine("\n--- Room Allocation Details ---");
+                foreach (var allocation in roomAllocations)
+                {
+                    Console.WriteLine($"Room No: {allocation.AllocatedRoomNo}, " +
+                                      $"Customer No: {allocation.AllocatedCustomer.CustomerNo}, " +
+                                      $"Customer Name: {allocation.AllocatedCustomer.CustomerName}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while displaying room allocations: {ex.Message}");
+            }
+        }
 
 
     }
