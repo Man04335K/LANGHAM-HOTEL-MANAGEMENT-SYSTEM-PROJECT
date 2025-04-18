@@ -61,7 +61,7 @@ namespace LanghamHotelManagementSystem
                 Console.WriteLine("7. Save the Room Allocations To a File");
                 Console.WriteLine("8. Show the Room Allocations From a File");
                 Console.WriteLine("9. Exit");
-                // Add new option 0 for Backup
+                Console.WriteLine("0. Backup Room Allocation File");
                 Console.WriteLine("**********************************************************************************");
                 Console.Write("Enter Your Choice Number Here:");
                 int choice = Convert.ToInt32(Console.ReadLine());
