@@ -80,8 +80,9 @@ namespace LanghamHotelManagementSystem
                         break;
 
                     case 3:
-                        // allocate Room To Customer function
+                        AllocateRoom();
                         break;
+
                     case 4:
                         // De-Allocate Room From Customer function
                         break;
@@ -161,6 +162,69 @@ namespace LanghamHotelManagementSystem
                 Console.WriteLine($"An error occurred while displaying rooms: {ex.Message}");
             }
         }
+        public static void AllocateRoom()
+        {
+            try
+            {
+                if (listofRooms == null || listofRooms.Length == 0)
+                {
+                    Console.WriteLine("No rooms available to allocate. Please add rooms first.");
+                    return;
+                }
+
+                Console.Write("Enter Room Number to Allocate: ");
+                int roomNo = Convert.ToInt32(Console.ReadLine());
+
+                Room selectedRoom = listofRooms.FirstOrDefault(r => r.RoomNo == roomNo);
+
+                if (selectedRoom == null)
+                {
+                    throw new InvalidOperationException("Room number does not exist.");
+                }
+
+                if (selectedRoom.IsAllocated)
+                {
+                    Console.WriteLine("Room is already allocated.");
+                    return;
+                }
+
+                Console.Write("Enter Customer Number: ");
+                int custNo = Convert.ToInt32(Console.ReadLine());
+
+                Console.Write("Enter Customer Name: ");
+                string custName = Console.ReadLine();
+
+                Customer newCustomer = new Customer
+                {
+                    CustomerNo = custNo,
+                    CustomerName = custName
+                };
+
+                RoomAllocation allocation = new RoomAllocation
+                {
+                    AllocatedRoomNo = roomNo,
+                    AllocatedCustomer = newCustomer
+                };
+
+                selectedRoom.IsAllocated = true;
+                roomAllocations.Add(allocation);
+
+                Console.WriteLine($"Room {roomNo} allocated successfully to {custName}.");
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Invalid input format. Please enter numeric values where required.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+            }
+        }
+
 
 
     }
