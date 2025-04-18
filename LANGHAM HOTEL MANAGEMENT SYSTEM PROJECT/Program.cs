@@ -84,8 +84,9 @@ namespace LanghamHotelManagementSystem
                         break;
 
                     case 4:
-                        // De-Allocate Room From Customer function
+                        DeallocateRoom();
                         break;
+
                     case 5:
                         // display Room Alocations function;
                         break;
@@ -214,6 +215,52 @@ namespace LanghamHotelManagementSystem
             catch (FormatException)
             {
                 Console.WriteLine("Invalid input format. Please enter numeric values where required.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+            }
+        }
+
+        public static void DeallocateRoom()
+        {
+            try
+            {
+                if (roomAllocations.Count == 0)
+                {
+                    Console.WriteLine("No rooms have been allocated yet.");
+                    return;
+                }
+
+                Console.Write("Enter Room Number to De-Allocate: ");
+                int roomNo = Convert.ToInt32(Console.ReadLine());
+
+                // Check if the room is actually allocated
+                RoomAllocation allocation = roomAllocations.FirstOrDefault(ra => ra.AllocatedRoomNo == roomNo);
+
+                if (allocation == null)
+                {
+                    throw new InvalidOperationException("The room is not allocated or does not exist.");
+                }
+
+                Room roomToDeallocate = listofRooms.FirstOrDefault(r => r.RoomNo == roomNo);
+
+                if (roomToDeallocate != null)
+                {
+                    roomToDeallocate.IsAllocated = false;
+                }
+
+                roomAllocations.Remove(allocation);
+
+                Console.WriteLine($"Room {roomNo} has been successfully de-allocated.");
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Invalid input format. Please enter a valid room number.");
             }
             catch (InvalidOperationException ex)
             {
