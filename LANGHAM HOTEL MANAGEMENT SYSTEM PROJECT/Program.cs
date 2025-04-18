@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace LanghamHotelManagementSystem
 {
@@ -34,7 +35,7 @@ namespace LanghamHotelManagementSystem
 
     class Program
     {
-        public static List<Room> listOfRooms = new List<Room>();
+        public static List<Room> listofRooms = new List<Room>();
         public static List<RoomAllocation> roomAllocations = new List<RoomAllocation>();
         public static string filePath;
         // Main function
@@ -47,14 +48,10 @@ namespace LanghamHotelManagementSystem
             do
             {
                 Console.Clear();
-                Console.WriteLine("****************************************************************
-                * ******************");
-                Console.WriteLine(" LANGHAM HOTEL MANAGEMENT SYSTEM
-                ");
-                Console.WriteLine(" MENU
-                ");
-                Console.WriteLine("****************************************************************
-                * ******************");
+                Console.WriteLine("**********************************************************************************");
+                Console.WriteLine(" LANGHAM HOTEL MANAGEMENT SYSTEM");
+                Console.WriteLine(" MENU ");
+                Console.WriteLine("**********************************************************************************");
                 Console.WriteLine("1. Add Rooms");
                 Console.WriteLine("2. Display Rooms");
                 Console.WriteLine("3. Allocate Rooms");
@@ -65,8 +62,7 @@ namespace LanghamHotelManagementSystem
                 Console.WriteLine("8. Show the Room Allocations From a File");
                 Console.WriteLine("9. Exit");
                 // Add new option 0 for Backup
-                Console.WriteLine("****************************************************************
-                * ******************");
+                Console.WriteLine("**********************************************************************************");
                 Console.Write("Enter Your Choice Number Here:");
                 int choice = Convert.ToInt32(Console.ReadLine());
                 switch (choice)
@@ -92,9 +88,10 @@ namespace LanghamHotelManagementSystem
                         break;
 
                     case 6:
-                        // Display "Billing Feature is Under Construction and will
-                        be added soon...!!!"
-                break;
+                        Console.WriteLine("Billing Feature is Under Construction and will be added soon…!!!");
+                        break;
+
+                       
                     case 7:
                         // SaveRoomAllocationsToFile
                         break;
@@ -118,14 +115,14 @@ namespace LanghamHotelManagementSystem
                 Console.Write("Please Enter the Total Number of Rooms in the Hotel: ");
                 int totalRooms = Convert.ToInt32(Console.ReadLine());
 
-                listofRooms = new Room[totalRooms];
+                listofRooms = new List<Room>();
 
                 for (int i = 0; i < totalRooms; i++)
                 {
                     Console.Write("Please enter the Room Number: ");
                     int roomNo = Convert.ToInt32(Console.ReadLine());
 
-                    listofRooms[i] = new Room(roomNo);
+                    listofRooms.Add(new Room { RoomNo = roomNo, IsAllocated = false });
                 }
 
                 Console.WriteLine("\nRooms added successfully!");
@@ -144,7 +141,7 @@ namespace LanghamHotelManagementSystem
         {
             try
             {
-                if (listofRooms == null || listofRooms.Length == 0)
+                if (listofRooms == null || listofRooms.Count == 0)
                 {
                     Console.WriteLine("No rooms have been added yet.");
                     return;
@@ -168,7 +165,8 @@ namespace LanghamHotelManagementSystem
         {
             try
             {
-                if (listofRooms == null || listofRooms.Length == 0)
+                // Corrected the condition to use Count instead of Length
+                if (listofRooms == null || listofRooms.Count == 0)
                 {
                     Console.WriteLine("No rooms available to allocate. Please add rooms first.");
                     return;
