@@ -99,9 +99,11 @@ namespace LanghamHotelManagementSystem
                         //Show Room Allocations From File
                         break;
                     case 9:
-                        // Exit Application
+                        Console.WriteLine("Thank you for using the LANGHAM Hotel Management System. Goodbye!");
+                        Environment.Exit(0);
                         break;
                     default:
+                        Console.WriteLine("Invalid choice. Please try again.");
                         break;
                 }
                 Console.Write("\nWould You Like To Continue(Y/N):");
