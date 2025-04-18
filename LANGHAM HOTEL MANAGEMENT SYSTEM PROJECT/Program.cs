@@ -37,13 +37,13 @@ namespace LanghamHotelManagementSystem
     {
         public static List<Room> listofRooms = new List<Room>();
         public static List<RoomAllocation> roomAllocations = new List<RoomAllocation>();
-        public static string filePath;
+        public static string mainFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "lhms_850002581.txt");
+
         // Main function
         static void Main(string[] args)
         {
-            string folderPath =
-            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            filePath = Path.Combine(folderPath, "HotelManagement.txt");
+           
+
             char ans;
             do
             {
@@ -91,17 +91,23 @@ namespace LanghamHotelManagementSystem
                         Console.WriteLine("Billing Feature is Under Construction and will be added soon…!!!");
                         break;
 
-                       
+
                     case 7:
-                        // SaveRoomAllocationsToFile
+                        SaveRoomAllocationsToFile();
                         break;
+
                     case 8:
-                        //Show Room Allocations From File
+                        ShowRoomAllocationsFromFile();
                         break;
+
                     case 9:
                         Console.WriteLine("Thank you for using the LANGHAM Hotel Management System. Goodbye!");
                         Environment.Exit(0);
                         break;
+                    case 0:
+                        BackupRoomAllocations();
+                        break;
+
                     default:
                         Console.WriteLine("Invalid choice. Please try again.");
                         break;
@@ -294,6 +300,128 @@ namespace LanghamHotelManagementSystem
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred while displaying room allocations: {ex.Message}");
+            }
+        }
+        public static void SaveRoomAllocationsToFile()
+        {
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(mainFilePath, true)) // true to append
+                {
+                    sw.WriteLine("========== Room Allocations ==========");
+                    sw.WriteLine("Timestamp: " + DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss"));
+
+                    bool dataWritten = false;
+
+                    foreach (Room room in listofRooms)
+                    {
+                        if (room.IsAllocated)
+                        {
+                            sw.WriteLine($"Room No: {room.RoomNo} => Allocated");
+                            dataWritten = true;
+                        }
+                    }
+
+                    if (!dataWritten)
+                    {
+                        sw.WriteLine("No room allocations found.");
+                    }
+
+                    sw.WriteLine("======================================\n");
+                    Console.WriteLine("Room allocation details saved to file successfully.");
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine("ERROR: You don't have permission to write to the file.");
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine("File I/O Error: " + ex.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Save to file operation completed.");
+            }
+        }
+        public static void ShowRoomAllocationsFromFile()
+        {
+            try
+            {
+                if (!File.Exists(mainFilePath))
+                {
+                    throw new FileNotFoundException("The file does not exist.");
+                }
+
+                string[] lines = File.ReadAllLines(mainFilePath);
+
+                Console.WriteLine("\n========== Contents of Room Allocations File ==========");
+                foreach (string line in lines)
+                {
+                    Console.WriteLine(line);
+                }
+                Console.WriteLine("========================================================");
+            }
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine("ERROR: " + ex.Message);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine("ERROR: You don’t have permission to read the file.");
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine("ERROR reading the file: " + ex.Message);
+            }
+            finally
+            {
+                Console.WriteLine("File read operation completed.");
+            }
+        }
+
+        public static void BackupRoomAllocations()
+        {
+            string mainFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "lhms_850002581.txt");
+            string backupFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "lhms_850002581_backup.txt");
+
+            try
+            {
+                if (File.Exists(mainFile))
+                {
+                    // Read content from main file
+                    string content = File.ReadAllText(mainFile);
+
+                    // Append content to backup file with timestamp
+                    using (StreamWriter sw = new StreamWriter(backupFile, true))
+                    {
+                        sw.WriteLine($"Backup on {DateTime.Now}");
+                        sw.WriteLine(content);
+                        sw.WriteLine("---------------------------------------------");
+                    }
+
+                    // Clear the content of the main file
+                    File.WriteAllText(mainFile, string.Empty);
+
+                    Console.WriteLine("Backup completed successfully. Main file has been cleared.");
+                }
+                else
+                {
+                    Console.WriteLine("Main file not found. Nothing to backup.");
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine("You do not have permission to write to the backup file.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred during backup: " + ex.Message);
+            }
+            finally
+            {
+                Console.WriteLine("Backup process completed.\nPress any key to continue...");
+                Console.ReadKey();
             }
         }
 
