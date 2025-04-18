@@ -76,8 +76,9 @@ namespace LanghamHotelManagementSystem
                         break;
 
                     case 2:
-                        // display Rooms function;
+                        DisplayRooms();
                         break;
+
                     case 3:
                         // allocate Room To Customer function
                         break;
@@ -136,6 +137,30 @@ namespace LanghamHotelManagementSystem
             }
         }
 
+        public static void DisplayRooms()
+        {
+            try
+            {
+                if (listofRooms == null || listofRooms.Length == 0)
+                {
+                    Console.WriteLine("No rooms have been added yet.");
+                    return;
+                }
+
+                Console.WriteLine("\nRoom No\t\tStatus");
+                Console.WriteLine("--------------------------------");
+
+                foreach (Room room in listofRooms)
+                {
+                    string status = room.IsAllocated ? "Allocated" : "Available";
+                    Console.WriteLine($"{room.RoomNo}\t\t{status}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while displaying rooms: {ex.Message}");
+            }
+        }
 
 
     }
