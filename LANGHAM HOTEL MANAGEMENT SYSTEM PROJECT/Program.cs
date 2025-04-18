@@ -1,40 +1,41 @@
-﻿/*
-* Project Name:
-* Author Name:
-* Date:
-* Application Purpose:
-*
-*/
+﻿/* 
+ * Project Name:LANGHAM Hotel Management System
+ * Author Name:Manpreet Kaur
+ * Date:19/04/2025
+ * Application Purpose:To manage hotel room allocation, customer records,file storage,and backups with exception handling
+ * 
+ */
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-namespace Assessment2Task2
+
+namespace LanghamHotelManagementSystem
 {
-    // Custom Class - Room
+    // Room class
     public class Room
     {
-        public int RoomNo()
-    public bool IsAllocated()
+        public int RoomNo { get; set; }
+        public bool IsAllocated { get; set; }
     }
-    // Custom Class - Customer
+
+    // Customer class
     public class Customer
     {
-        public int CustomerNo()
-    public string CustomerName()
+        public int CustomerNo { get; set; }
+        public string CustomerName { get; set; }
     }
-    // Custom Class - RoomAllocation
-    public class RoomlAllocaltion
+
+    // Room Allocation class
+    public class RoomAllocation
     {
-        public int AllocatedRoomNo()
-    public Customer AllocatedCustomer()
+        public int AllocatedRoomNo { get; set; }
+        public Customer AllocatedCustomer { get; set; }
     }
-    // Custom Main Class - Program
+
     class Program
     {
-        // Variables declaration and initialization
-        public static Room[] listofRooms;
-        public static int[] listOfRoomlAllocaltions;
+        public static List<Room> listOfRooms = new List<Room>();
+        public static List<RoomAllocation> roomAllocations = new List<RoomAllocation>();
         public static string filePath;
         // Main function
         static void Main(string[] args)
@@ -71,8 +72,9 @@ namespace Assessment2Task2
                 switch (choice)
                 {
                     case 1:
-                        // adding Rooms function
+                        AddRooms();
                         break;
+
                     case 2:
                         // display Rooms function;
                         break;
@@ -105,5 +107,36 @@ namespace Assessment2Task2
                 ans = Convert.ToChar(Console.ReadLine());
             } while (ans == 'y' || ans == 'Y');
         }
+        public static void AddRooms()
+        {
+            try
+            {
+                Console.Write("Please Enter the Total Number of Rooms in the Hotel: ");
+                int totalRooms = Convert.ToInt32(Console.ReadLine());
+
+                listofRooms = new Room[totalRooms];
+
+                for (int i = 0; i < totalRooms; i++)
+                {
+                    Console.Write("Please enter the Room Number: ");
+                    int roomNo = Convert.ToInt32(Console.ReadLine());
+
+                    listofRooms[i] = new Room(roomNo);
+                }
+
+                Console.WriteLine("\nRooms added successfully!");
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Invalid input. Please enter numeric values only.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+
+
+
     }
 }
